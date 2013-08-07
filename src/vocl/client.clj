@@ -21,6 +21,11 @@
 (defn start [uri handlers]
   (let [session (connect uri)]
     (receive-all (:channel session) #(task (handling % session handlers)))
+    (on-realized (:client session)
+                 (fn [ch] (routing handlers {:method :CALL
+                                             :key "start"
+                                             :body {}} session))
+                 nil)
     session))
 
 (defn stop [session]

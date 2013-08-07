@@ -6,6 +6,8 @@
 (def uri "ws://0.0.0.0:8008")
 
 (defhandlers handlers
+  [:CALL "start" (fn [body session]
+                   (send-ping session))]
   [:POST "pong" handle-pong])
 
 (def my-session (atom nil))

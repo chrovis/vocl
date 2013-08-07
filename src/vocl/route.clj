@@ -2,7 +2,7 @@
 
 ;; request is like following
 ;;
-;; {:method :get/:post
+;; {:method (or :GET :PORT :DELETE)
 ;;  :key "a_unique_key"
 ;;  :body {:key1 "value", :key2 12345}}
 
