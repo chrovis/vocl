@@ -4,6 +4,9 @@
           [vocl.route :only [routing]]
           [vocl.pack :only [freeze thaw]]))
 
+(defn local-handling [req session handlers]
+  (routing handlers req session))
+
 (defn- handling [req-string session handlers]
   (let [req (thaw req-string)
         result (routing handlers req session)]

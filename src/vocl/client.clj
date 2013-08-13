@@ -18,13 +18,13 @@
 
 (defn- handling [req-string session handlers]
   (let [req (thaw req-string)
-        result (local-handling req session handlers)]
+        result (routing handlers req session)]
     (if (nil? result) nil (freeze result))))
 
 (defn start [uri handlers]
-  (let [connection (connect uri)
+  (let [remote-session (connect uri)
         local-ch (channel)
-        session (assoc connection :local local-ch)]
+        session (assoc remote-session :local local-ch)]
     (receive-all (:channel session) #(task (handling % session handlers)))
     (receive-all (:local session) #(task (local-handling % session handlers)))
     (on-realized (:client session)
