@@ -25,8 +25,10 @@
   (let [remote-session (connect uri)
         local-ch (channel)
         session (assoc remote-session :local local-ch)]
-    (receive-all (:channel session) #(task (handling % session handlers)))
-    (receive-all (:local session) #(task (local-handling % session handlers)))
+    ;; (receive-all (:channel session) #(task (handling % session handlers)))
+    ;; (receive-all (:local session) #(task (local-handling % session handlers)))
+    (receive-all (:channel session) #(handling % session handlers))
+    (receive-all (:local session) #(local-handling % session handlers))
     (on-realized (:client session)
                  (do (enqueue (:local session) {:method :CALL
                                                 :key "start"

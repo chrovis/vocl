@@ -14,7 +14,8 @@
 
 (defn- connected [ch handshake handlers]
   (let [session {:channel ch :handshake handshake}]
-    (receive-all ch #(task (handling % session handlers)))))
+    ;(receive-all ch #(task (handling % session handlers)))
+    (receive-all ch #(handling % session handlers))))
 
 ; handshake contains a hashmap like
 ;
