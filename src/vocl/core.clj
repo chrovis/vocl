@@ -33,3 +33,15 @@
 
 (defmacro defhandlers [name & handlers]
   `(def ~name (make-handlers ~@handlers)))
+
+;; call
+
+(defn- -call-handler! [session method key body]
+  (enqueue (:local session)
+           (make-request method key body)))
+
+(defn call-handler!
+  ([session method key]
+     (-call-handler! session method key {}))
+  ([session method key body]
+     (-call-handler! session method key body)))
