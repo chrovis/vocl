@@ -24,9 +24,9 @@
 (defn setup
   []
   (reset! test-server (server/start port handlers))
-  (Thread/sleep 1000)
+  (Thread/sleep 200)
   (reset! test-client (client/start uri none))
-  (Thread/sleep 1000))
+  (Thread/sleep 200))
 
 (defn shutdown
   []
@@ -39,5 +39,4 @@
                      (after :facts (shutdown))]
   (fact "send request"
    (do (send-request! @test-client :POST "ping")
-       (Thread/sleep 200)
-       @ping) => :done))
+       (deref ping 100 nil)) => :done))

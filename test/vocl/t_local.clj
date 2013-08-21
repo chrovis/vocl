@@ -16,5 +16,4 @@
                                        (reset! session nil)))]
   (fact "call handler"
         (do (call-handler! @session :CALL "hello")
-            (Thread/sleep 200)
-            @hello) => :done))
+            (deref hello 100 nil)) => :done))
