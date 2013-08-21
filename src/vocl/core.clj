@@ -36,7 +36,6 @@
 
 ;; call
 
-
 (defn- -call-handler! [session method key body]
   (enqueue (:local session)
            (make-request method key body)))

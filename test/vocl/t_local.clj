@@ -16,7 +16,7 @@
 (with-state-changes [(before :facts (reset! session (local/start handlers)))
                      (after :facts (do (local/stop @session)
                                        (reset! session nil)))]
-  (with-state-changes [(before :facts (do (call-handler! @session :CALL "hello")
-                                          (Thread/sleep 200)))]
-    (fact "call handler"
-          @hello => :done)))
+  (fact "call handler"
+        (do (call-handler! @session :CALL "hello")
+            (Thread/sleep 200)
+            @hello) => :done))
