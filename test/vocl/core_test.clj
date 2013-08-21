@@ -2,6 +2,8 @@
   (:require [clojure.test :refer :all]
             [vocl.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+;; (deftest test-make-request
+;;   (let [res (make-request :TEST "key" {:foo 1 :bar 2 :baz 3})]
+;;     (is (= :TEST (:method res)))
+;;     (is (= "key" (:key res)))
+;;     (is (= {:foo 1 :bar 2 :baz 3} (:body res)))))
