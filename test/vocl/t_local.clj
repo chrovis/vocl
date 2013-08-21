@@ -1,14 +1,12 @@
 (ns vocl.t-local
   (:use midje.sweet)
-  (:require [clojure.test :refer :all]
-            [vocl.local :as local]
+  (:require [vocl.local :as local]
             [vocl.core :refer :all]))
 
 (def hello (promise))
 
 (defhandlers handlers
   [:CALL "hello" (fn [body session]
-                   (is (empty? body))
                    (deliver hello :done))])
 
 (def session (atom nil))
