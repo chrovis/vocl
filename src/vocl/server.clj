@@ -38,11 +38,19 @@
 (defn uri [port]
   (format "ws://0.0.0.0:%d" port))
 
-(defn start [port handlers]
-  (let [server (start-http-server
-                (fn [ch handshake] (connected ch handshake handlers))
-                {:port port :websocket true})]
-    server))
+(defn start
+  ([port handlers]
+     (start port handlers nil))
+  ([port handlers auth]
+      (let [server (start-http-server
+                    (fn [ch handshake]
+                      (if (nil? auth)
+                        (connected ch handshake handlers)
+                        (if (auth (:headers handshake))
+                          (connected ch handshake handlers)
+                          (close ch))))
+                    {:port port :websocket true})]
+        server)))
 
 (defn stop [server]
   (server))
