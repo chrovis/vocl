@@ -17,24 +17,6 @@
     ;(receive-all ch #(task (handling % session handlers)))
     (receive-all ch #(handling % session handlers))))
 
-; handshake contains a hashmap like
-;
-; {:remote-addr 0:0:0:0:0:0:0:1,
-;  :scheme :http,
-;  :websocket true,
-;  :request-method :get,
-;  :query-string nil,
-;  :content-type nil,
-;  :keep-alive? true,
-;  :websocket? true,
-;  :uri /,
-;  :server-name localhost,
-;  :headers {HTTP_HEADER},
-;  :content-length nil,
-;  :server-port 8008,
-;  :character-encoding nil,
-;  :body nil}
-
 (defn uri [port]
   (format "ws://0.0.0.0:%d" port))
 
