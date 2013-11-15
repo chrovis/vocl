@@ -26,18 +26,20 @@
   [handshake]
   (let [user (get handshake "user")
         cred (get handshake "cred")]
-    (and (= user "foo@example.com")
-                 (= cred "pa55w0rd"))))
+    (if (and (= user "foo@example.com")
+             (= cred "pa55w0rd"))
+      {:user "foo@example.com"}
+      nil)))
 
 (defn setup
   []
   (reset! test-server (server/start port handlers auth))
   (Thread/sleep 200)
   (reset! test-client-invalid (client/start uri none {:user "bar@example.com"
-                                                    :cred "none"}))
+                                                      :cred "none"}))
   (Thread/sleep 200)
   (reset! test-client-valid (client/start uri none {:user "foo@example.com"
-                                              :cred "pa55w0rd"}))
+                                                    :cred "pa55w0rd"}))
   (Thread/sleep 200))
 
 (defn shutdown

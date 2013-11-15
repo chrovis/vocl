@@ -12,8 +12,9 @@
         result (routing handlers req session)]
     (if (nil? result) nil (freeze result))))
 
-(defn- connected [ch handshake handlers]
-  (let [session {:channel ch :handshake handshake}]
+(defn- connected
+  [ch handshake handlers user-info]
+  (let [session {:channel ch :handshake handshake :user-info user-info}]
     ;(receive-all ch #(task (handling % session handlers)))
     (receive-all ch #(handling % session handlers))))
 
@@ -27,10 +28,11 @@
       (let [server (start-http-server
                     (fn [ch handshake]
                       (if (nil? auth)
-                        (connected ch handshake handlers)
-                        (if (auth (:headers handshake))
-                          (connected ch handshake handlers)
-                          (close ch))))
+                        (connected ch handshake handlers nil)
+                        (let [user-info (auth (:headers handshake))]
+                          (if (nil? user-info)
+                            (close ch)
+                            (connected ch handshake handlers user-info)))))
                     {:port port :websocket true})]
         server)))
 
