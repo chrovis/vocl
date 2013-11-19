@@ -31,9 +31,13 @@
       {:user "foo@example.com"}
       nil)))
 
+(defn started
+  [user-info]
+  (println "started with" user-info))
+
 (defn setup
   []
-  (reset! test-server (server/start port handlers auth))
+  (reset! test-server (server/start port handlers auth started))
   (Thread/sleep 200)
   (reset! test-client-invalid (client/start uri none {:user "bar@example.com"
                                                       :cred "none"}))
