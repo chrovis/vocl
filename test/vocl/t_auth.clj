@@ -33,7 +33,7 @@
 
 (defn started
   [user-info]
-  (println "started with" user-info))
+  (assoc user-info :message "hello world"))
 
 (defn setup
   []

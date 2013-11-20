@@ -19,25 +19,25 @@
     (receive-all ch #(handling % session handlers))))
 
 (defn- connected
-  [ch handshake handlers user-info on-started]
-  (on-started user-info)
-  (connected* ch handshake handlers user-info))
+  [ch handshake handlers user-info* init]
+  (let [user-info (init user-info*)]
+    (connected* ch handshake handlers user-info)))
 
 (defn uri [port]
   (format "ws://0.0.0.0:%d" port))
 
 (defn start
   ([port handlers]
-     (start port handlers nil (fn [user-info])))
-  ([port handlers auth on-started]
+     (start port handlers nil (fn [user-info] user-info)))
+  ([port handlers auth init]
       (let [server (start-http-server
                     (fn [ch handshake]
                       (if (nil? auth)
-                        (connected ch handshake handlers nil on-started)
+                        (connected ch handshake handlers nil init)
                         (let [user-info (auth (:headers handshake))]
                           (if (nil? user-info)
                             (close ch)
-                            (connected ch handshake handlers user-info on-started)))))
+                            (connected ch handshake handlers user-info init)))))
                     {:port port :websocket true})]
         server)))
 
