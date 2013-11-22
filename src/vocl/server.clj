@@ -12,23 +12,18 @@
         result (routing handlers req session)]
     (if (nil? result) nil (freeze result))))
 
-(defn- connected*
-  [ch handshake handlers user-info]
-  (let [session {:channel ch :handshake handshake :user-info user-info}]
-    ;(receive-all ch #(task (handling % session handlers)))
-    (receive-all ch #(handling % session handlers))))
-
 (defn- connected
-  [ch handshake handlers user-info* init]
-  (let [user-info (init user-info*)]
-    (connected* ch handshake handlers user-info)))
+  [ch handshake handlers user-info init]
+  (let [session (init {:channel ch :handshake handshake :user-info user-info})]
+    (receive-all ch #(handling % session handlers))
+    session))
 
 (defn uri [port]
   (format "ws://0.0.0.0:%d" port))
 
 (defn start
   ([port handlers]
-     (start port handlers nil (fn [user-info] user-info)))
+     (start port handlers nil (fn [session] session)))
   ([port handlers auth init]
       (let [server (start-http-server
                     (fn [ch handshake]

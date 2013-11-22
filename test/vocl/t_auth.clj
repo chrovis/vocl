@@ -32,8 +32,9 @@
       nil)))
 
 (defn started
-  [user-info]
-  (assoc user-info :message "hello world"))
+  [session]
+  (assoc session :user-info
+         (assoc (:user-info session) :message "hello world")))
 
 (defn setup
   []
