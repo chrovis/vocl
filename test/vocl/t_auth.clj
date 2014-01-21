@@ -6,7 +6,7 @@
 
 (def ping (promise))
 
-(defn handle-ping [body session]
+(defn- handle-ping [body session]
   (deliver ping :done))
 
 (defhandlers handlers
@@ -40,7 +40,7 @@
   []
   (reset! test-server (server/start port handlers auth started))
   (Thread/sleep 200)
-  (reset! test-client-invalid (client/start uri none {:user "bar@example.com"
+  (reset! test-client-invalid (client/start uri none {:user "foo@example.com"
                                                       :cred "none"}))
   (Thread/sleep 200)
   (reset! test-client-valid (client/start uri none {:user "foo@example.com"
@@ -58,6 +58,6 @@
                      (after :facts (shutdown))]
   (fact "send request"
         (do (send-request! @test-client-invalid :POST "ping")
-            (deref ping 1000 :failed)) => :failed
+            (deref ping 500 :failed)) => :failed
         (do (send-request! @test-client-valid :POST "ping")
-            (deref ping 100 nil)) => :done))
+            (deref ping 500 nil)) => :done))
