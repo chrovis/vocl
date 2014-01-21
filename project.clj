@@ -1,6 +1,6 @@
 (defproject vocl "0.1.0-SNAPSHOT"
   :description "a library for client/server communication via WebSocket"
-  :url "https://chrov.is"
+  :url "https://github.com/chrovis/vocl"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :repositories [["snapshots" {:url "https://nexus.xcoo.jp/content/repositories/snapshots"}]

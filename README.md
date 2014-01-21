@@ -2,6 +2,12 @@
 
 a simple library for client/server communication via WebSocket
 
+## How to use
+
+TODO
+
+(See example or test case codes)
+
 ## Test
 
     lein midje
@@ -13,6 +19,6 @@ or
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © Xcoo, Inc.
 
 Distributed under the Eclipse Public License, the same as Clojure.
