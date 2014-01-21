@@ -1,6 +1,6 @@
 # vocl
 
-a simple library for client/server communication via WebSocket
+a library for client/server communication via WebSocket
 
 ## How to use
 
