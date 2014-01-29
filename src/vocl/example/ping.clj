@@ -1,4 +1,4 @@
-(ns example.ping
+(ns vocl.example.ping
   (:use [vocl.core]))
 
 ;; handle ping/pong

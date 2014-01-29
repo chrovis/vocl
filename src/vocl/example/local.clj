@@ -1,6 +1,6 @@
-(ns example.vocl-local
+(ns vocl.example.local
   (:use [vocl.core]
-        [example.ping])
+        [vocl.example.ping])
   (:require [vocl.local :as local]))
 
 (def my-session (promise))

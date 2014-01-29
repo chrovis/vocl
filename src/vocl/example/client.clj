@@ -1,6 +1,6 @@
-(ns example.vocl-client
+(ns vocl.example.client
   (:use [vocl.core]
-        [example.ping])
+        [vocl.example.ping])
   (:require [vocl.client :as client]))
 
 (def uri "ws://0.0.0.0:8008")

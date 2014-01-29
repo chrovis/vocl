@@ -1,6 +1,6 @@
-(ns example.vocl-server
+(ns vocl.example.server
   (:use [vocl.core]
-        [example.ping])
+        [vocl.example.ping])
   (:require [vocl.server :as server]))
 
 (def port 8008)
