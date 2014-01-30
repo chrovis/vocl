@@ -10,14 +10,10 @@
         ch (wait-for-result client)]
     {:client client :channel ch}))
 
-(defn- disconnect [session]
-  ;; TODO
-  )
-
-(defn local-handling [req session handlers]
+(defn handle-local [req session handlers]
   (routing handlers req session))
 
-(defn- handling [req-string session handlers]
+(defn- handle-remote [req-string session handlers]
   (let [req (thaw req-string)
         result (routing handlers req session)]
     (if (nil? result) nil (freeze result))))
@@ -29,18 +25,23 @@
      (let [remote-session (connect uri options)
            local-ch (channel)
            session (assoc remote-session :local local-ch)]
-       ;; (receive-all (:channel session) #(task (handling % session handlers)))
-       ;; (receive-all (:local session) #(task (local-handling % session handlers)))
-       (receive-all (:channel session) #(handling % session handlers))
-       (receive-all (:local session) #(local-handling % session handlers))
+       (receive-all (:channel session) #(handle-remote % session handlers))
+       (receive-all (:local session) #(handle-local % session handlers))
        (on-realized (:client session)
-                    (do (enqueue (:local session) {:method :CALL
-                                                   :key "start"
-                                                   :body {}})
-                        nil)
+                    (fn [c]
+                      (on-realized (closed-result c)
+                                   (fn [ch]
+                                     (enqueue (:local session) {:method :CALL
+                                                                :key "stop"
+                                                                :body {}}))
+                                   nil)
+                      (enqueue (:local session) {:method :CALL
+                                                 :key "start"
+                                                 :body {}})
+
+                      nil)
                     nil)
        session)))
 
 (defn stop [session]
-  ;; TODO
-  )
+  (close-on-idle 100 (:channel session)))

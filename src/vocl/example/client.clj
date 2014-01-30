@@ -5,35 +5,26 @@
 
 (def uri "ws://0.0.0.0:8008")
 
-(def my-session (promise))
-
-(defn- start-pinging
-  []
-  (future (when (realized? my-session)
-            (Thread/sleep 3000)
-            (send-ping @my-session)
-            (Thread/sleep 3000)
-            (send-ping @my-session)
-            (Thread/sleep 3000)
-            (send-ping @my-session)
-            (System/exit 0))))
+(def my-session (atom nil))
 
 (defhandlers handlers
   [:CALL "start" (fn [body session]
-                   (send-ping session)
-                   (call-handler! session :CALL "hello")
-                   (start-pinging))]
+                   (call-handler! session :CALL "hello"))]
+  [:CALL "stop" (fn [body session]
+                  (println "bye"))]
   [:CALL "hello" (fn [body session]
                   (println "hello" body))]
   [:POST "pong" handle-pong])
 
 (defn start []
-  (let [s (client/start uri handlers)]
-    (deliver my-session s)))
+  (let [s (client/start uri handlers {:user "foo@example.com"
+                                      :cred "pa55w0rd"})]
+    (reset! my-session s)))
 
 (defn stop []
-  (realized? my-session ;; TODO
-             ))
+  (when-not (nil? @my-session)
+    (client/stop @my-session)
+    (reset! my-session nil)))
 
 (defn -main []
   (start)
