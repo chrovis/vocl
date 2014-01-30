@@ -36,9 +36,13 @@
   (assoc session :user-info
          (assoc (:user-info session) :message "hello world")))
 
+(defn stopped
+  [session]
+  nil)
+
 (defn setup
   []
-  (reset! test-server (server/start port handlers auth started))
+  (reset! test-server (server/start port handlers auth started stopped))
   (Thread/sleep 200)
   (reset! test-client-invalid (client/start uri none {:user "foo@example.com"
                                                       :cred "none"}))
