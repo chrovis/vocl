@@ -10,7 +10,7 @@
 
 (def my-server (atom nil))
 
-(defn auth
+(defn- auth
   [handshake]
   (let [user (get handshake "user")
         cred (get handshake "cred")]
@@ -19,13 +19,17 @@
       {:user "foo@example.com"}
       nil)))
 
-(defn connected
+(defn- connected
   [session]
   (assoc session :user-info
          (assoc (:user-info session) :message "hello world")))
 
+(defn- disconnected
+  [session]
+  (println "disconnected:" (:user-info session)))
+
 (defn start []
-  (let [s (server/start port handlers auth connected)]
+  (let [s (server/start port handlers auth connected disconnected)]
     (reset! my-server s)))
 
 (defn stop []
